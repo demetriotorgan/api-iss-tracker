@@ -1,4 +1,5 @@
 const { savePosition, getAllOrbits, getActiveOrbit, deleteAllOrbits } = require("../services/orbitService");
+const mongoose = require('mongoose');
 
 async function createPosition(req,res){
     try {
@@ -85,10 +86,29 @@ async function resetOrbits(req, res) {
     }
 };
 
+async function healthCheck(req,res){
+    try {
+        const status = mongoose.connection.readyState;
+        
+        return res.status(200).json({
+            api:'online',
+            mongodb: status === 1 ? 'connected' : 'disconnected',
+            readyState: status
+        })
+    } catch (error) {
+        console.error('Erro com a conexão da API',error);
+        return res.status(404).json({
+            success:false,
+            error: error.message
+        })
+    }
+};
+
 
 module.exports = {
     createPosition,
     getOrbits,
     getCurrentOrbit,
-    resetOrbits
+    resetOrbits,
+    healthCheck
 }
