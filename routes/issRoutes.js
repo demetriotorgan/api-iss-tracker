@@ -1,0 +1,11 @@
+const express = require('express');
+const { createPosition, getOrbits, getCurrentOrbit, resetOrbits } = require('../controllers/issController');
+
+const router = express.Router();
+
+router.post('/position', createPosition);
+router.get('/orbits', getOrbits);
+router.get('/orbits/active', getCurrentOrbit);
+router.delete('/orbits', resetOrbits);
+
+module.exports = router;
